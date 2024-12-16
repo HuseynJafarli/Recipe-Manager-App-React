@@ -1,0 +1,93 @@
+{
+  "recipes": [
+    {
+      "id": "1",
+      "title": "Chocolate Chip Cookies",
+      "description": "Classic chocolate chip cookies with a gooey center and crispy edges.",
+      "ingredients": [
+        "2 1/4 cups all-purpose flour",
+        "1 teaspoon baking soda",
+        "1 teaspoon salt",
+        "1 cup unsalted butter, softened",
+        "3/4 cup granulated sugar",
+        "3/4 cup packed brown sugar",
+        "1 teaspoon vanilla extract",
+        "2 large eggs",
+        "2 cups chocolate chips"
+      ],
+      "preparation": [
+        "Preheat the oven to 375°F (190°C).",
+        "Combine flour, baking soda, and salt in a small bowl.",
+        "Beat butter, granulated sugar, brown sugar, and vanilla extract in a large mixer bowl until creamy.",
+        "Add eggs one at a time, beating well after each addition.",
+        "Gradually beat in the flour mixture.",
+        "Stir in chocolate chips.",
+        "Drop by rounded tablespoon onto ungreased baking sheets.",
+        "Bake for 9 to 11 minutes or until golden brown. Let cool on wire racks."
+      ],
+      "tags": [
+        "Dessert",
+        "Easy",
+        "Quick Meal"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-12-16T14:45:00Z"
+    },
+    {
+      "id": "2",
+      "title": "Vegetarian Lasagna",
+      "description": "A hearty and healthy vegetarian lasagna packed with vegetables and cheese.",
+      "ingredients": [
+        "12 lasagna noodles",
+        "2 cups ricotta cheese",
+        "3 cups shredded mozzarella cheese",
+        "1/2 cup grated Parmesan cheese",
+        "4 cups marinara sauce",
+        "2 cups chopped spinach",
+        "1 zucchini, sliced",
+        "1 bell pepper, diced",
+        "1 cup sliced mushrooms",
+        "1 teaspoon dried basil",
+        "1 teaspoon dried oregano"
+      ],
+      "preparation": [
+        "Preheat the oven to 375°F (190°C).",
+        "Cook the lasagna noodles according to package instructions.",
+        "In a bowl, mix ricotta cheese, spinach, and half the Parmesan cheese.",
+        "Spread a thin layer of marinara sauce in a 9x13-inch baking dish.",
+        "Layer noodles, ricotta mixture, vegetables, mozzarella, and marinara sauce. Repeat layers.",
+        "Top with remaining mozzarella and Parmesan cheese.",
+        "Cover with foil and bake for 25 minutes. Remove foil and bake for another 10 minutes.",
+        "Let cool for 10 minutes before serving."
+      ],
+      "tags": [
+        "Vegetarian",
+        "Main Course",
+        "Medium"
+      ],
+      "difficulty": "Medium",
+      "lastUpdated": "2024-12-16T14:45:00Z"
+    },
+    {
+      "id": "9049",
+      "title": "Chocolate Cake",
+      "description": "Rich and moist chocolate cake.",
+      "ingredients": [
+        "Flour",
+        "Cocoa powder",
+        "Sugar",
+        "Eggs"
+      ],
+      "preparationSteps": [
+        "Mix ingredients",
+        "Bake in oven"
+      ],
+      "tags": [
+        "Dessert",
+        "Vegetarian"
+      ],
+      "difficulty": "Easy",
+      "lastUpdated": "2024-12-16T15:00:00Z"
+    }
+  ]
+}
