@@ -89,5 +89,21 @@
       "difficulty": "Easy",
       "lastUpdated": "2024-12-16T15:00:00Z"
     }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "subject": "Just hangin around",
+      "message": "Hello."
+    },
+    {
+      "id": "afba",
+      "name": "Huseyn Jafarli",
+      "email": "huseyncfrli6@gmail.com",
+      "subject": "testing",
+      "message": "BLABLABLA"
+    }
   ]
 }
