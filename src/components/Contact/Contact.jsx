@@ -20,7 +20,7 @@ const ContactPage = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/messages", formData);
+      await axios.post("http://localhost:3001/messages", formData);
       setResponseMessage("Message sent successfully!");
       setFormData({ name: "", email: "", subject: "", message: "" }); 
     } catch (error) {
@@ -30,7 +30,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center">
+    <div className="bg-gray-100 min-h-[calc(100vh-270px)] flex flex-col items-center">
       <header className="bg-blue-700 text-white py-4 w-full shadow-md">
         <div className="container mx-auto px-4">
           <h1 className="text-2xl font-bold">Contact Us</h1>
