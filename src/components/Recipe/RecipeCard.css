@@ -1,0 +1,10 @@
+.btn-group {
+    opacity: 0;
+    transition: 0.2s all ease-in-out;
+}
+
+
+.card-div:hover > .btn-group {
+    opacity: 1;
+    bottom: 0;
+}

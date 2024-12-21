@@ -26,7 +26,7 @@ function Home() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 my-6">
+      <div className="container mx-auto px-4 my-6 min-h-[calc(100vh-350px)]">
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">Featured Recipes</h2>
           <div className="flex flex-wrap justify-center gap-5">
