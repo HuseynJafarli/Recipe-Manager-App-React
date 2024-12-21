@@ -60,6 +60,19 @@ function Header() {
             </li>
             <li>
             <NavLink
+                to="/recipe"
+                className={({ isActive }) =>
+                    isActive
+                    ? "block py-2 px-3 text-blue-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                    : "block py-2 px-3 text-black bg-blue-700 rounded md:bg-transparent md:text-black md:p-0"
+                }
+                aria-current="page"
+                >
+                Recipe
+            </NavLink>
+            </li>
+            <li>
+            <NavLink
                 to="/contact"
                 className={({ isActive }) =>
                     isActive
