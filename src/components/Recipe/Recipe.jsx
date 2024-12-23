@@ -36,7 +36,7 @@ function Recipe() {
     <div className='mt-4 min-h-[calc(100vh-350px)]'>
       <div className='flex flex-wrap justify-center gap-5 m-auto w-5/6 '>
       {allData?.map((recipe) => (
-          <RecipeCard data={recipe} />
+          <RecipeCard key={recipe.id} data={recipe} />
           
       ))}
       </div>
