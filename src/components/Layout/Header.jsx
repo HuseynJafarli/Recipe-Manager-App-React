@@ -2,6 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 function Header() {
+
+    const [navOpen, setNavOpen] = React.useState(false);
+
   return (
     <>
     <nav className="bg-white border-gray-200">
@@ -25,6 +28,7 @@ function Header() {
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar-default"
           aria-expanded="false"
+          onClick={() => setNavOpen(!navOpen)}
         >
           <span className="sr-only">Open main menu</span>
           <svg
@@ -43,15 +47,15 @@ function Header() {
             />
           </svg>
         </button>
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+        <div className={`${navOpen ? '' : 'hidden'} w-full md:block md:w-auto`} id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
             <li>
             <NavLink
                 to="/"
                 className={({ isActive }) =>
                     isActive
-                    ? "block py-2 px-3 text-blue-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
-                    : "block py-2 px-3 text-black bg-blue-700 rounded md:bg-transparent md:text-black md:p-0"
+                    ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                    : "block py-2 px-3 text-black rounded md:bg-transparent md:text-black md:p-0"
                 }
                 aria-current="page"
                 >
@@ -63,8 +67,8 @@ function Header() {
                 to="/recipe"
                 className={({ isActive }) =>
                     isActive
-                    ? "block py-2 px-3 text-blue-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
-                    : "block py-2 px-3 text-black bg-blue-700 rounded md:bg-transparent md:text-black md:p-0"
+                    ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                    : "block py-2 px-3 text-black rounded md:bg-transparent md:text-black md:p-0"
                 }
                 aria-current="page"
                 >
@@ -76,8 +80,8 @@ function Header() {
                 to="/contact"
                 className={({ isActive }) =>
                     isActive
-                    ? "block py-2 px-3 text-blue-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
-                    : "block py-2 px-3 text-black bg-blue-700 rounded md:bg-transparent md:text-black md:p-0"
+                    ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                    : "block py-2 px-3 text-black rounded md:bg-transparent md:text-black md:p-0"
                 }
                 aria-current="page"
                 >
