@@ -1,6 +1,10 @@
 import React from 'react'
 import axios from 'axios';
-function CreateRecipe({setIsOpen}) {
+import { useContext } from 'react';
+import { AppContext } from '../../App';
+
+function CreateRecipe({setIsOpen, data={}}) {
+    const {valueToRefresh, setValueToRefresh} = useContext(AppContext);
 
     const [formData, setFormData] = React.useState({
         title: '',
@@ -11,14 +15,31 @@ function CreateRecipe({setIsOpen}) {
         difficulty: '',
     });
 
-    const createRecipeHandler = React.useCallback(() => {
+    const createRecipeHandler = React.useCallback((e) => {
+        e.preventDefault();
         axios.post('http://localhost:3001/recipes', formData)
           .then((response) => {
             console.log('Recipe created:', response.data);
             setIsOpen(false)
+            setValueToRefresh(valueToRefresh + 1);
+            
           })
           .catch((error) => {
             console.error('Error creating recipe:', error);
+          });
+    }, [formData, setIsOpen]);
+
+    const updateRecipeHandler = React.useCallback((e) => {
+        e.preventDefault();
+        axios.patch(`http://localhost:3001/recipes/${data.id}`, formData)
+          .then((response) => {
+            console.log('Recipe updated:', response.data);
+            setIsOpen(false)
+            setValueToRefresh(valueToRefresh + 1);
+            
+          })
+          .catch((error) => {
+            console.error('Error updating recipe:', error);
           });
     }, [formData, setIsOpen]);
 
@@ -75,7 +96,7 @@ function CreateRecipe({setIsOpen}) {
       
 
 
-    const createTagInput = React.useCallback(() => {
+    const createTagInput = React.useCallback((tag='') => {
         const parentContainer = document.querySelector('.tags');
         const id = parentContainer.children.length;
         const tagInputContainer = document.createElement('div');
@@ -88,6 +109,7 @@ function CreateRecipe({setIsOpen}) {
         input.className = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5';
         input.placeholder = 'Enter tag';
         input.required = true;
+        input.value = tag;
         input.addEventListener('input', handleAllInputChange);
 
         const removeButton = document.createElement('button');
@@ -112,7 +134,7 @@ function CreateRecipe({setIsOpen}) {
       }, []);
 
 
-    const createIngredientInput = React.useCallback(() => {
+    const createIngredientInput = React.useCallback((ingredient='') => {
         const parentContainer = document.querySelector('.ingredients');
         const id = parentContainer.children.length;
         const tagInputContainer = document.createElement('div');
@@ -125,6 +147,7 @@ function CreateRecipe({setIsOpen}) {
         input.className = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5';
         input.placeholder = 'Enter ingredient';
         input.required = true;
+        input.value = ingredient;
         input.addEventListener('input', handleAllInputChange);
 
 
@@ -150,7 +173,7 @@ function CreateRecipe({setIsOpen}) {
       }, []);
 
       
-    const createPrepInput = React.useCallback(() => {
+    const createPrepInput = React.useCallback((prepStep='') => {
         const parentContainer = document.querySelector('.prepSteps');
         const id = parentContainer.children.length;
         const tagInputContainer = document.createElement('div');
@@ -163,6 +186,7 @@ function CreateRecipe({setIsOpen}) {
         input.className = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5';
         input.placeholder = 'Enter step';
         input.required = true;
+        input.value = prepStep;
         input.addEventListener('input', handleAllInputChange);
 
 
@@ -206,12 +230,40 @@ function CreateRecipe({setIsOpen}) {
     }, [createPrepInput])
 
 
-
     React.useEffect(() => {
+        if (Object.keys(data).length !== 0) {
+            const newData = Object.keys(data).reduce((acc, key) => {
+                if (key !== 'id' && key !== 'lastUpdated') {
+                  acc[key] = data[key];
+                }
+                return acc;
+              }, {});
+              
+            setFormData(newData)
+        }
+    }, [data])
+
+
+    const mountedRef = React.useRef(false);
+    React.useEffect(() => {
+      if (!mountedRef.current) {
+        if (Object.keys(data).length !== 0) {
+          for (let tag of data.tags) {
+            createTagInput(tag)
+          }
+          for (let ingredient of data.ingredients) {
+            createIngredientInput(ingredient)
+          }
+          for (let prep of data.preparation) {
+            createPrepInput(prep)
+          }
+        }
         createTagInput()
         createIngredientInput()
         createPrepInput()
-    }, [createTagInput, createIngredientInput, createPrepInput])
+        mountedRef.current = true;
+      }
+    }, [createTagInput, createIngredientInput, createPrepInput, data])
 
   return (
         
@@ -232,7 +284,7 @@ function CreateRecipe({setIsOpen}) {
                         </button>
                     </div>
 
-                    <form className="p-4 md:p-5">
+                    <form className="p-4 md:p-5" method='POST' action={'/recipe'}>
                         <div className="grid gap-4 mb-4 grid-cols-2">
                             <div className="col-span-2">
                                 <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
@@ -244,11 +296,11 @@ function CreateRecipe({setIsOpen}) {
                             </div>
                             <div className="col-span-2">
                                 <label htmlFor="difficulty" className="block mb-2 text-sm font-medium text-gray-900">Difficulty</label>
-                                <select  onChange={handleAllInputChange} defaultValue={formData.difficulty} name="difficulty" id="difficulty" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                <select  onChange={handleAllInputChange} value={formData.difficulty} name="difficulty" id="difficulty" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
                                     <option value="">Select difficulty</option>
-                                    <option value="easy">Easy</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="difficult">Difficult</option>
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Difficult">Difficult</option>
                                 </select>
                             </div>
                             <div className="col-span-2">
@@ -294,10 +346,16 @@ function CreateRecipe({setIsOpen}) {
                                 <button onClick={(e) => addPrepHandler(e)} className='bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded'>Add step</button>
                             </div>
                         </div>
+                        {Object.keys(data).length === 0 ? (
                         <button onClick={createRecipeHandler} type="submit" className="text-white inline-flex items-center w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                             <svg className="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                             Add new recipe
                         </button>
+                        ): (
+                        <button onClick={updateRecipeHandler} type="submit" className="text-white inline-flex items-center w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                            Update recipe
+                        </button>
+                        )}
                     </form>
                 </div>
             </div>

@@ -2,6 +2,9 @@ import React from 'react'
 import RecipeCard from '../Recipe/RecipeCard'
 import CreateRecipe from '../PopupPage/CreateRecipe';
 import axios from 'axios'
+import { useContext } from 'react';
+import { AppContext } from '../../App';
+
 
 
 function Recipe() {
@@ -9,12 +12,14 @@ function Recipe() {
     const [allData, setAllData] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
 
+      const {valueToRefresh, setValueToRefresh} = useContext(AppContext);
+
     React.useEffect(() => {
       axios
         .get("http://localhost:3001/recipes")
         .then((response) => setAllData(response.data))
         .catch((error) => console.log(error));
-    }, []);
+    }, [valueToRefresh]);
 
 
   return (
