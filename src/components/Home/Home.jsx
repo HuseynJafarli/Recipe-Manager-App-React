@@ -43,7 +43,42 @@ function Home() {
 
         <section>
           <h2 className="text-xl font-semibold mb-2">Projects from Web and Mobile 1</h2>
-          
+          <p>During Web and Mobile 1 course we built an Auto Job Form Filler extension for chromium-based browsers. 
+            <br />
+            It can store predefined fields, use them on various websites, and create a cover letter for job applications.</p>
+            <br />
+        </section>
+
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-2">Links</h2>
+          <a 
+            href="https://github.com/HuseynJafarli" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 underline font-semibold transition-all duration-200 ease-in-out"
+          >
+           GitHub page of Huseyn
+          </a>
+          <br />
+          <br />
+          <a 
+            href="https://github.com/Fuad2005" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 underline font-semibold transition-all duration-200 ease-in-out"
+          >
+            GitHub page of Fuad
+          </a>
+          <br />
+          <br />
+          <a 
+            href="https://github.com/Fuad2005/Auto_Form_Filler" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 underline font-semibold transition-all duration-200 ease-in-out"
+          >
+            Auto Form Filler Project Github
+          </a>
         </section>
       </div>
     </>
