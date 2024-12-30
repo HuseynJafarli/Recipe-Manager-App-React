@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate  } from 'react-router'
+import { Link } from 'react-router'
 import './RecipeCard.css'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -17,7 +17,6 @@ function RecipeCard({data}) {
     const [openPopup, setOpenPopup] = React.useState(false);
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const navigate = useNavigate();
 
     // React.useEffect(() => {
     //     console.log(data)
@@ -36,11 +35,11 @@ function RecipeCard({data}) {
             if (result.isConfirmed) {
                 axios
                 .delete(`http://localhost:3001/recipes/${data.id}`)
-                .then((response) => {navigate('/recipe'); setValueToRefresh(valueToRefresh + 1)})
+                .then((response) => {setValueToRefresh(valueToRefresh + 1)})
                 .catch((error) => console.log(error));
             }
         });
-    }, [data.id, navigate]);
+    }, [data.id]);
 
 
   return (
@@ -51,7 +50,7 @@ function RecipeCard({data}) {
         <div className='absolute top-1 right-0'>
             <span className='bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded'>{data.difficulty}</span>
         </div>
-        <Link to={`/recipe/${data.id}`}>
+        <Link to={`/recipe`}>
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{data.title}</h5>
         </Link>
         <p>{data.description}</p>
@@ -66,6 +65,7 @@ function RecipeCard({data}) {
             {data.tags.map((tag, idx) => (
                 <span key={idx} className="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 mx-0.5 rounded-full">{tag}</span>
             ))}
+            <p className='mt-5'>Last Updated: {new Date(data.lastUpdated).toLocaleDateString()}</p>
         </div>
 
         <div className='btn-group absolute bottom-[-10px] right-0 pb-2 pr-2 flex justify-end items-center gap-1'>

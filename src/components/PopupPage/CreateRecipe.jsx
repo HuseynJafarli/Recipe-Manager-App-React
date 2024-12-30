@@ -17,7 +17,11 @@ function CreateRecipe({setIsOpen, data={}}) {
 
     const createRecipeHandler = React.useCallback((e) => {
         e.preventDefault();
-        axios.post('http://localhost:3001/recipes', formData)
+        const newRecipe = {
+          ...formData,
+          lastUpdated: new Date().toISOString(),
+        };
+        axios.post('http://localhost:3001/recipes', newRecipe)
           .then((response) => {
             console.log('Recipe created:', response.data);
             setIsOpen(false)
@@ -31,7 +35,11 @@ function CreateRecipe({setIsOpen, data={}}) {
 
     const updateRecipeHandler = React.useCallback((e) => {
         e.preventDefault();
-        axios.patch(`http://localhost:3001/recipes/${data.id}`, formData)
+        const newRecipe = {
+          ...formData,
+          lastUpdated: new Date().toISOString(),
+        };
+        axios.put(`http://localhost:3001/recipes/${data.id}`, newRecipe)
           .then((response) => {
             console.log('Recipe updated:', response.data);
             setIsOpen(false)
@@ -50,15 +58,9 @@ function CreateRecipe({setIsOpen, data={}}) {
         setFormData((prevFormData) => {
           const newFormData = { ...prevFormData };
       
-          if (name === 'title') {
-            newFormData.title = value;
-          }
-          if (name === 'description') {
-            newFormData.description = value;
-          }
-          if (name === 'difficulty') {
-            newFormData.difficulty = value;
-          }
+          if (name === "title" || name === "description" || name === "difficulty") {
+            newFormData[name] = value;
+        }
           if (name.startsWith('tag')) {
             const index = parseInt(name.split('-')[1], 10);
             const newTags = [...newFormData.tags];
