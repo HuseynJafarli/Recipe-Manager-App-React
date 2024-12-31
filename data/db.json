@@ -34,7 +34,6 @@
       "lastUpdated": "2024-12-30T21:33:26.551Z"
     },
     {
-      "id": "2",
       "title": "Vegetarian Lasagna",
       "description": "A hearty and healthy vegetarian lasagna packed with vegetables and cheese.",
       "ingredients": [
@@ -62,11 +61,12 @@
       ],
       "tags": [
         "Vegetarian",
-        "Main Course",
-        "Medium"
+        "Medium",
+        "Main Course"
       ],
       "difficulty": "Medium",
-      "lastUpdated": "2024-12-16T14:45:00Z"
+      "lastUpdated": "2024-12-31T09:12:41.124Z",
+      "id": "2"
     },
     {
       "id": "3bd9",

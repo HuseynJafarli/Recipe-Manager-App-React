@@ -117,7 +117,8 @@ function Recipe() {
 
         </div>
 
-        <div className='flex gap-1'>
+        <div className='flex gap-1 items-center'>
+          <h3 className='text-lg font-semibold'>Sort</h3>
         <select
           className="w-full placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-1 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md cursor-pointer"
           onChange={(e) => setSortKey(e.target.value)}

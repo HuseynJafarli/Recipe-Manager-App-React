@@ -128,6 +128,8 @@ function CreateRecipe({setIsOpen, data={}}) {
         tagInputContainer.appendChild(input);
         removeButton.addEventListener('click', (e) => {
             e.preventDefault();
+            const index = parseInt(tagInputContainer.id.split('-')[1], 10) ;
+            setFormData(formData => ({ ...formData, tags: formData.tags.filter((tag, i) => i !== index) }));
             parentContainer.removeChild(tagInputContainer);
         });
         tagInputContainer.appendChild(removeButton);
@@ -139,9 +141,9 @@ function CreateRecipe({setIsOpen, data={}}) {
     const createIngredientInput = React.useCallback((ingredient='') => {
         const parentContainer = document.querySelector('.ingredients');
         const id = parentContainer.children.length;
-        const tagInputContainer = document.createElement('div');
-        tagInputContainer.className = 'flex gap-2';
-        tagInputContainer.id = `ingredientDiv-${id}`;
+        const ingredientInputContainer = document.createElement('div');
+        ingredientInputContainer.className = 'flex gap-2';
+        ingredientInputContainer.id = `ingredientDiv-${id}`;
 
         const input = document.createElement('input');
         input.type = 'text';
@@ -164,23 +166,25 @@ function CreateRecipe({setIsOpen, data={}}) {
         `;
 
         removeButton.innerHTML = svgHtml;
-        tagInputContainer.appendChild(input);
+        ingredientInputContainer.appendChild(input);
         removeButton.addEventListener('click', (e) => {
             e.preventDefault();
-            parentContainer.removeChild(tagInputContainer);
+            const index = parseInt(ingredientInputContainer.id.split('-')[1], 10) ;
+            setFormData(formData => ({ ...formData, ingredients: formData.ingredients.filter((ingredient, i) => i !== index) }));
+            parentContainer.removeChild(ingredientInputContainer);
         });
-        tagInputContainer.appendChild(removeButton);
+        ingredientInputContainer.appendChild(removeButton);
 
-        parentContainer.appendChild(tagInputContainer);
+        parentContainer.appendChild(ingredientInputContainer);
       }, []);
 
       
     const createPrepInput = React.useCallback((prepStep='') => {
         const parentContainer = document.querySelector('.prepSteps');
         const id = parentContainer.children.length;
-        const tagInputContainer = document.createElement('div');
-        tagInputContainer.className = 'flex gap-2';
-        tagInputContainer.id = `prepStepsDiv-${id}`;
+        const prepStepInputContainer = document.createElement('div');
+        prepStepInputContainer.className = 'flex gap-2';
+        prepStepInputContainer.id = `prepStepsDiv-${id}`;
 
         const input = document.createElement('input');
         input.type = 'text';
@@ -203,14 +207,16 @@ function CreateRecipe({setIsOpen, data={}}) {
         `;
 
         removeButton.innerHTML = svgHtml;
-        tagInputContainer.appendChild(input);
+        prepStepInputContainer.appendChild(input);
         removeButton.addEventListener('click', (e) => {
             e.preventDefault();
-            parentContainer.removeChild(tagInputContainer);
+            const index = parseInt(prepStepInputContainer.id.split('-')[1], 10) ;
+            setFormData(formData => ({ ...formData, preparation: formData.preparation.filter((prepStep, i) => i !== index) }));
+            parentContainer.removeChild(prepStepInputContainer);
         });
-        tagInputContainer.appendChild(removeButton);
+        prepStepInputContainer.appendChild(removeButton);
 
-        parentContainer.appendChild(tagInputContainer);
+        parentContainer.appendChild(prepStepInputContainer);
       }, []);
 
 
@@ -244,6 +250,8 @@ function CreateRecipe({setIsOpen, data={}}) {
             setFormData(newData)
         }
     }, [data])
+
+
 
 
     const mountedRef = React.useRef(false);

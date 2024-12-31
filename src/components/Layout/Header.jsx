@@ -52,6 +52,7 @@ function Header() {
             <li>
             <NavLink
                 to="/"
+                onClick={() => setNavOpen(false)}
                 className={({ isActive }) =>
                     isActive
                     ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
@@ -65,6 +66,7 @@ function Header() {
             <li>
             <NavLink
                 to="/recipe"
+                onClick={() => setNavOpen(false)}
                 className={({ isActive }) =>
                     isActive
                     ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
@@ -78,6 +80,7 @@ function Header() {
             <li>
             <NavLink
                 to="/contact"
+                onClick={() => setNavOpen(false)}
                 className={({ isActive }) =>
                     isActive
                     ? "block py-2 px-3 text-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
