@@ -5,6 +5,9 @@ import axios from 'axios'
 import { useContext } from 'react';
 import { AppContext } from '../../App';
 
+import Select from 'react-select';
+
+
 
 
 function Recipe() {
@@ -15,17 +18,33 @@ function Recipe() {
   const [sortKey, setSortKey] = React.useState('date');
   const [ordering, setOrdering] = React.useState('asc');
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(4); 
+  const [itemsPerPage, ] = React.useState(6);
+  const [allTags, setAllTags] = React.useState({});
+  const [selectedTags, setSelectedTags] = React.useState([]);
+  const [isFiltered, setIsFiltered] = React.useState(false);
+  const [filteredData, setFilteredData] = React.useState([]);
   const { valueToRefresh } = useContext(AppContext);
+  const [totalPages, setTotalPages] = React.useState(0);
 
-
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
 
   const getPaginatedData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return allData.slice(startIndex, endIndex);
+    if (isFiltered) {
+      return filteredData.slice(startIndex, endIndex);
+    } 
+    else {
+      return allData.slice(startIndex, endIndex);
+    }
   };
+
+  React.useEffect(() => {
+    if (isFiltered) {
+      setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+    } else {
+      setTotalPages(Math.ceil(allData.length / itemsPerPage));
+    }
+  }, [isFiltered, allData, filteredData, itemsPerPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -39,6 +58,9 @@ function Recipe() {
       .then((response) => {
         const sortedData = response.data.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
         setAllData(sortedData);
+        const allTags = [...new Set(sortedData.flatMap(item => item.tags))];
+        const options = allTags.map(tag => ({ value: tag.toLowerCase(), label: tag }));
+        setAllTags(options);
       })
       .catch((error) => console.log(error));
   }, [valueToRefresh]);
@@ -49,15 +71,18 @@ function Recipe() {
     if (e) e.preventDefault();
     axios.get('http://localhost:3001/recipes')
       .then(res => {
-        const filteredData = res.data.filter(item =>
+        const searchedData = res.data.filter(item =>
           item.title.toLowerCase().includes(searchRef.current.value.toLowerCase()) ||
           item.description.toLowerCase().includes(searchRef.current.value.toLowerCase())
 
         );
-        setAllData(filteredData);
+        if (isFiltered) {
+          setFilteredData(searchedData)
+        } else setAllData(searchedData);
+
       })
       .catch(err => console.log(err));
-  }, [])
+  }, [isFiltered])
 
 
   const [diffOrd,] = React.useState({
@@ -66,47 +91,86 @@ function Recipe() {
     'Difficult': 3
   })
   const handleSort = React.useCallback(() => {
-    console.log(sortKey)
-    switch (sortKey) {
-      case 'date':
-        if (ordering === 'desc') {
-          setAllData((prevData) => [...prevData].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)));
-        } else {
-          setAllData((prevData) => [...prevData].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)));
-
-        }
-        break;
-      case 'title':
-        if (ordering === 'desc') {
-          setAllData((prevData) => [...prevData].sort((a, b) => b.title.localeCompare(a.title)));
-        } else {
-          setAllData((prevData) => [...prevData].sort((a, b) => a.title.localeCompare(b.title)));
-        }
-        break;
-      case 'difficulty':
-        if (ordering === 'desc') {
-          setAllData((prevData) => [...prevData].sort((a, b) => diffOrd[b.difficulty] - diffOrd[a.difficulty]));
-        } else {
-          setAllData((prevData) => [...prevData].sort((a, b) => diffOrd[a.difficulty] - diffOrd[b.difficulty]));
-        }
-        break;
-      default:
-        break;
+    if (isFiltered) {
+      switch (sortKey) {
+        case 'date':
+          if (ordering === 'desc') {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)));
+          } else {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)));
+  
+          }
+          break;
+        case 'title':
+          if (ordering === 'desc') {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => b.title.localeCompare(a.title)));
+          } else {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => a.title.localeCompare(b.title)));
+          }
+          break;
+        case 'difficulty':
+          if (ordering === 'desc') {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => diffOrd[b.difficulty] - diffOrd[a.difficulty]));
+          } else {
+            setFilteredData((prevData) => [...prevData].sort((a, b) => diffOrd[a.difficulty] - diffOrd[b.difficulty]));
+          }
+          break;
+        default:
+          break;
+      }
     }
+    else {
+      switch (sortKey) {
+        case 'date':
+          if (ordering === 'desc') {
+            setAllData((prevData) => [...prevData].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)));
+          } else {
+            setAllData((prevData) => [...prevData].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)));
+  
+          }
+          break;
+        case 'title':
+          if (ordering === 'desc') {
+            setAllData((prevData) => [...prevData].sort((a, b) => b.title.localeCompare(a.title)));
+          } else {
+            setAllData((prevData) => [...prevData].sort((a, b) => a.title.localeCompare(b.title)));
+          }
+          break;
+        case 'difficulty':
+          if (ordering === 'desc') {
+            setAllData((prevData) => [...prevData].sort((a, b) => diffOrd[b.difficulty] - diffOrd[a.difficulty]));
+          } else {
+            setAllData((prevData) => [...prevData].sort((a, b) => diffOrd[a.difficulty] - diffOrd[b.difficulty]));
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
+
   }, [diffOrd, sortKey, ordering]);
 
   React.useEffect(() => {
     handleSort();
   }, [sortKey, ordering, handleSort]);
 
-
+  const handleFilterChange = (selected) => { 
+    setSelectedTags(selected); 
+    if (selected.length !== 0) {
+      setFilteredData(allData.filter(item => selected.every(tag => item.tags.includes(tag.label))));
+      setIsFiltered(true)
+    } else {
+      setIsFiltered(false)
+    }
+  };
 
 
   return (
     <>
       {isOpen && <CreateRecipe setIsOpen={setIsOpen} />}
       <header className="bg-blue-700 text-white py-4 w-full shadow-md ">
-        <div className='flex flex-col gap-4 md:flex-row justify-between items-center container mx-auto'>
+        <div className='flex flex-col gap-4 lg:flex-row justify-between items-center container mx-auto'>
           <div className=" px-4">
             <h1 className="text-2xl font-bold">All Recipes</h1>
           </div>
@@ -158,6 +222,12 @@ function Recipe() {
               }
 
             </button>
+          </div>
+
+          <div className='flex gap-1 items-center'>
+            <h3 className='text-lg font-semibold'>Tag: </h3>
+
+            <Select isMulti options={allTags} value={selectedTags} onChange={handleFilterChange} placeholder="Select tags" classNamePrefix="my-multi-select" className='text-black max-w-[400px]' />
           </div>
 
           <div>
