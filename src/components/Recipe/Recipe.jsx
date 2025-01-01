@@ -18,13 +18,55 @@ function Recipe() {
   const [sortKey, setSortKey] = React.useState('date');
   const [ordering, setOrdering] = React.useState('asc');
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage, ] = React.useState(6);
+  const [itemsPerPage,] = React.useState(6);
   const [allTags, setAllTags] = React.useState({});
   const [selectedTags, setSelectedTags] = React.useState([]);
   const [isFiltered, setIsFiltered] = React.useState(false);
   const [filteredData, setFilteredData] = React.useState([]);
   const { valueToRefresh } = useContext(AppContext);
   const [totalPages, setTotalPages] = React.useState(0);
+  const [selectedRecipes, setSelectedRecipes] = React.useState([]);
+
+  const toggleRecipeSelection = (recipe) => {
+    setSelectedRecipes((prev) =>
+      prev.some((r) => r.id === recipe.id)
+        ? prev.filter((r) => r.id !== recipe.id)
+        : [...prev, recipe]
+    );
+  };
+  
+
+  React.useEffect(() => {
+    console.log(selectedRecipes);
+  }, [selectedRecipes]);
+
+  const handleShare = () => {
+    if (selectedRecipes.length === 0) {
+      alert("Please select at least one recipe to share.");
+      return;
+    }
+
+    const jsonData = JSON.stringify(selectedRecipes, null, 2);
+
+    // Version 1
+    // const mailtoLink = `mailto:?subject=Selected Recipes&body=${encodeURIComponent(
+    //   `Here are the selected recipes in JSON format:\n\n${jsonData}`
+    // )}`;
+
+    // if (mailtoLink.length > 20000) {
+      // If too large, fallback to download
+      const blob = new Blob([jsonData], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "recipes.json";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert("Data too large for email. JSON file downloaded instead.");
+    // }
+  };
 
 
   const getPaginatedData = () => {
@@ -32,7 +74,7 @@ function Recipe() {
     const endIndex = startIndex + itemsPerPage;
     if (isFiltered) {
       return filteredData.slice(startIndex, endIndex);
-    } 
+    }
     else {
       return allData.slice(startIndex, endIndex);
     }
@@ -98,7 +140,7 @@ function Recipe() {
             setFilteredData((prevData) => [...prevData].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)));
           } else {
             setFilteredData((prevData) => [...prevData].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)));
-  
+
           }
           break;
         case 'title':
@@ -126,7 +168,7 @@ function Recipe() {
             setAllData((prevData) => [...prevData].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)));
           } else {
             setAllData((prevData) => [...prevData].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)));
-  
+
           }
           break;
         case 'title':
@@ -155,8 +197,8 @@ function Recipe() {
     handleSort();
   }, [sortKey, ordering, handleSort]);
 
-  const handleFilterChange = (selected) => { 
-    setSelectedTags(selected); 
+  const handleFilterChange = (selected) => {
+    setSelectedTags(selected);
     if (selected.length !== 0) {
       setFilteredData(allData.filter(item => selected.every(tag => item.tags.includes(tag.label))));
       setIsFiltered(true)
@@ -230,9 +272,9 @@ function Recipe() {
             <Select isMulti options={allTags} value={selectedTags} onChange={handleFilterChange} placeholder="Select tags" classNamePrefix="my-multi-select" className='text-black max-w-[400px]' />
           </div>
 
-          <div>
+          <div className='flex gap-2'>
             <button onClick={() => setIsOpen(true)} className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'>Create</button>
-
+            <button onClick={handleShare} className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'>Share</button>
           </div>
         </div>
       </header>
@@ -242,7 +284,7 @@ function Recipe() {
         {allData?.length === 0 && <p className='text-center text-2xl font-semibold'>No Data Found</p>}
         <div className='flex flex-wrap justify-center gap-5 m-auto w-5/6 '>
           {getPaginatedData()?.map((recipe) => (
-            <RecipeCard key={recipe.id} data={recipe} />
+            <RecipeCard key={recipe.id} data={recipe} isSelected={selectedRecipes.includes(recipe)} onSelect={toggleRecipeSelection} />
           ))}
 
         </div>
