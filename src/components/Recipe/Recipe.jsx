@@ -21,6 +21,7 @@ function Recipe() {
   const [itemsPerPage,] = React.useState(6);
   const [allTags, setAllTags] = React.useState({});
   const [selectedTags, setSelectedTags] = React.useState([]);
+  const [selectedDiff, setSelectedDiff] = React.useState({value: 'all', label: 'All'});
   const [isFiltered, setIsFiltered] = React.useState(false);
   const [filteredData, setFilteredData] = React.useState([]);
   const { valueToRefresh } = useContext(AppContext);
@@ -197,10 +198,24 @@ function Recipe() {
     handleSort();
   }, [sortKey, ordering, handleSort]);
 
-  const handleFilterChange = (selected) => {
+  const handleTagFilter = (selected) => {
     setSelectedTags(selected);
     if (selected.length !== 0) {
       setFilteredData(allData.filter(item => selected.every(tag => item.tags.includes(tag.label))));
+      setIsFiltered(true)
+    } else {
+      setIsFiltered(false)
+    }
+  };
+
+  const handleDiffFilter = (selected) => {
+    setSelectedDiff(selected);
+    if (selected) {
+      if (selected.label === 'All') {
+        setFilteredData(allData);
+        return
+      }
+      setFilteredData(allData.filter(item => item.difficulty === selected.label));
       setIsFiltered(true)
     } else {
       setIsFiltered(false)
@@ -212,10 +227,10 @@ function Recipe() {
     <>
       {isOpen && <CreateRecipe setIsOpen={setIsOpen} />}
       <header className="bg-blue-700 text-white py-4 w-full shadow-md ">
-        <div className='flex flex-col gap-4 lg:flex-row justify-between items-center container mx-auto'>
-          <div className=" px-4">
+          <div className="text-center pb-4">
             <h1 className="text-2xl font-bold">All Recipes</h1>
           </div>
+        <div className='flex flex-col gap-4 lg:flex-row justify-between items-center container mx-auto'>
           <div>
             <div className="w-full max-w-sm min-w-[300px]">
               <form method='get' className="relative mt-2" onSubmit={handleSearch}>
@@ -268,8 +283,9 @@ function Recipe() {
 
           <div className='flex gap-1 items-center'>
             <h3 className='text-lg font-semibold'>Tag: </h3>
-
-            <Select isMulti options={allTags} value={selectedTags} onChange={handleFilterChange} placeholder="Select tags" classNamePrefix="my-multi-select" className='text-black max-w-[400px]' />
+            <Select isMulti options={allTags} value={selectedTags} onChange={handleTagFilter} placeholder="Select tags" classNamePrefix="my-multi-select" className='text-black max-w-[400px]' />
+            <h3 className='text-lg font-semibold ml-4'>Difficulty: </h3>
+            <Select options={[{value: 'all', label: 'All'} ,{ value: 'easy', label: 'Easy' }, { value: 'medium', label: 'Medium' }, { value: 'difficult', label: 'Difficult' }]} defaultValue={{value: 'all', label: 'All'}} value={selectedDiff} onChange={handleDiffFilter} placeholder="Select difficulty" classNamePrefix="my-multi-select" className='text-black max-w-[400px]' />
           </div>
 
           <div className='flex gap-2'>
